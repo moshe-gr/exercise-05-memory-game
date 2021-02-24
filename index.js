@@ -28,14 +28,13 @@ function startGame(){
 }
 function show(num){
     window.document.getElementById(num).src = `images/${nums[num]}.png`
-    window.document.getElementById(num).style.pointerEvents = "none"
     open[open.length] = num
     if(open.length % 2 == 0 && open.length != 0){
         if(nums[open[open.length-2]] != nums[open[open.length-1]]){
             NUM.style.pointerEvents = "none"
             setTimeout(() => {
                 close(open.length-2);
-                NUM.style.pointerEvents = "auto"
+                NUM.style.pointerEvents = "auto";
             }, 1000)
         }
     }
@@ -43,6 +42,5 @@ function show(num){
 function close(start){
     for(let i = start; i < open.length; i++){
         window.document.getElementById(open[i]).src = `images/blank.png`
-        window.document.getElementById(open[i]).style.pointerEvents = "auto"
     }
 }
