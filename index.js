@@ -13,7 +13,7 @@ function setNumbers(){
 }
 function setBord(){
     for(let i = 0; i < nums.length; i++){
-        NUM.innerHTML += `<div id="${i}" class="col-3 my-2" onClick="show(${i})"><img src="images/blank.png"></div>`
+        NUM.innerHTML += `<img src="images/blank.png" id="${i}" class="col-3 my-2" onClick="show(${i})">`
     }
     bordSet = true
 }
@@ -27,7 +27,8 @@ function startGame(){
     }
 }
 function show(num){
-    window.document.getElementById(num).innerHTML = `<img src="images/${nums[num]}.png">`
+    window.document.getElementById(num).src = `images/${nums[num]}.png`
+    window.document.getElementById(num).style.pointerEvents = "none"
     open[open.length] = num
     if(open.length % 2 == 0 && open.length != 0){
         if(nums[open[open.length-2]] != nums[open[open.length-1]]){
@@ -41,6 +42,7 @@ function show(num){
 }
 function close(start){
     for(let i = start; i < open.length; i++){
-        window.document.getElementById(open[i]).innerHTML = `<img src="images/blank.png">`
+        window.document.getElementById(open[i]).src = `images/blank.png`
+        window.document.getElementById(open[i]).style.pointerEvents = "auto"
     }
 }
