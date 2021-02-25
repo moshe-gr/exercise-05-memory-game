@@ -1,11 +1,13 @@
 const NUM = window.document.getElementById("num")
 var nums = []
-var open = []
+var opendCards = []
+var pairs = 0
 
 function startGame(){
-    open.length = 0
+    opendCards.length = 0
     setNumbers()
     setBord()
+    endGame()
 }
 function setNumbers(){
     nums.length = 0
@@ -20,27 +22,44 @@ function setNumbers(){
 function setBord(){
     NUM.innerHTML = null
     for(let i = 0; i < nums.length; i++){
-        NUM.innerHTML += `<img src="images/blank.png" id="${i}" class="col-3 my-2" onclick="show(${i})">`
+        NUM.innerHTML += `<div id="${i}" class="col-3 my-2"><img src="images/blank.png" width="100%" onclick="show(${i})"></div>`
     }
-    bordSet = true
 }
 function show(num){
-    window.document.getElementById(num).src = `images/${nums[num]}.png`
-    window.document.getElementById(num).onclick = function() {'a'}
-    open[open.length] = num
-    if(open.length % 2 == 0 && open.length != 0){
-        if(nums[open[open.length-2]] != nums[open[open.length-1]]){
+    setStyle(num, "primary")
+    setTimeout(() => {
+        window.document.getElementById(num).innerHTML = `<img src="images/${nums[num]}.png" width="100%">`
+    }, 50)
+    opendCards[opendCards.length] = num
+    if(opendCards.length % 2 == 0 && opendCards.length != 0){
+        window.document.getElementById("moves").innerText = opendCards.length/2
+        if(nums[opendCards[opendCards.length-2]] != nums[opendCards[opendCards.length-1]]){
             NUM.style.pointerEvents = "none"
             setTimeout(() => {
                 close();
                 NUM.style.pointerEvents = "auto";
-            }, 1000)
+            }, 700)
+        }
+        else{
+
+            pairs++
+            if(pairs == nums.length/2){
+                endGame()
+            }
         }
     }
 }
 function close(){
-    for(let i = open.length-2; i < open.length; i++){
-        window.document.getElementById(open[i]).src = `images/blank.png`
-        window.document.getElementById(open[i]).onclick = function() {show(open[i])}
+    for(let i = opendCards.length-2; i < opendCards.length; i++){
+        setStyle(opendCards[i], "danger")
+        setTimeout(() => {
+            window.document.getElementById(opendCards[i]).innerHTML = `<img src="images/blank.png" width="100%" onclick="show(${opendCards[i]})">`
+        }, 260)
     }
+}
+function endGame(){
+    window.document.getElementById("endGame").target = "#endGame"
+}
+function setStyle(id, color, text=""){
+    window.document.getElementById(id).innerHTML = `<div class="bg-${color} w-100 h-100">${text}</div>`
 }
