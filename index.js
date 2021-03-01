@@ -15,6 +15,7 @@ var start = null
 
 setNumbers()
 setBord()
+setTimeout(()=>startTimer(),1500)
 
 function startGame(){
     window.document.location.reload()
@@ -69,31 +70,29 @@ function close(){
 }
 function endGame(){
     gamePause()
+    ENDGAME.innerHTML = `<div id="cong" style="color: rgb(220, 20, 130);">"congratulations!"</div><br><br><br><br>`
+    ENDGAME.innerHTML += `<div id="finalInfo" class="card w-25" style="left:37%;"><div>Time: ${m0}${minuts}:${s0}${seconds}</div>
+    <div class="btn btn-danger m-2">Moves: <strong>${opendCards.length/2}</strong></div></div>`
+    rating()
+    ENDGAME.innerHTML += `<button class="btn btn-success m-2" onclick="startGame()">New game</button>`
     SCREEN.style.pointerEvents = "none"
     SCREEN.style.opacity = 0.3
     var grow = 0
     var shrink = 100
-    ENDGAME.style.display = "block"
-    var cong = setInterval(() =>{
+    setInterval(() =>{
         if(grow <= 100 && shrink == 100){
-            ENDGAME.style.fontSize = `${grow}px`
+            window.document.getElementById("cong").style.fontSize = `${grow}px`
             grow += 5
         }
         else{
             grow = 0
-            ENDGAME.style.fontSize = `${shrink}px`
+            window.document.getElementById("cong").style.fontSize = `${shrink}px`
             shrink -= 5
             if(shrink == 0){
                 shrink = 100
             }
         }
     }, 55);
-    setTimeout(()=> {
-        clearInterval(cong)
-        ENDGAME.style.display = "none"
-        SCREEN.style.opacity = 1
-        SCREEN.style.pointerEvents = "auto"
-    }, 5000)
     setInterval(() => {
         CARD.className = "row bg-warning",
         setTimeout(() => CARD.className = "row bg-success", 500)
@@ -128,4 +127,15 @@ function gamePause(){
     clearInterval(start)
     CARD.style.pointerEvents = "none"
     TIME.innerHTML = `&#8987; <span onclick="startTimer()">${m0}${minuts}:${s0}${seconds} &#9726;</span>`
+}
+function rating(){
+    if(opendCards.length/2 < 20){
+        window.document.getElementById("finalInfo").innerHTML += `<div>Your rating: &#9733;&#9733;&#9733;</div>`
+    }
+    else if(opendCards.length/2 < 25){
+        window.document.getElementById("finalInfo").innerHTML += `<div>Your rating: &#9733;&#9733;&#9734;</div>`
+    }
+    else{
+        window.document.getElementById("finalInfo").innerHTML += `<div>Your rating: &#9733;&#9734;&#9734;</div>`
+    }
 }
