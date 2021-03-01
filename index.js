@@ -11,13 +11,25 @@ var minuts = 0
 var seconds = 0
 var m0 = "0"
 var s0 = "0"
-var start = null
 
-setNumbers()
+var start = null
+var stordNums = JSON.parse(window.localStorage.getItem("nums"))
+var stopendCards = JSON.parse(window.localStorage.getItem("opendCards"))
+var stpairs = parseInt(window.localStorage.getItem("pairs"))
+var stminuts = parseInt(window.localStorage.getItem("minuts"))
+var stseconds = parseInt(window.localStorage.getItem("seconds"))
+var stm0 = window.localStorage.getItem("m0")
+var sts0 = window.localStorage.getItem("s0")
+
+if(stordNums.length == 0){
+    setNumbers()
+}
 setBord()
-setTimeout(()=>startTimer(),1500)
+setTimeout(()=>startTimer(),800)
 
 function startGame(){
+    window.localStorage.removeItem("nums")
+    setNumbers()
     window.document.location.reload()
 }
 function setNumbers(){
@@ -29,23 +41,24 @@ function setNumbers(){
             i++
         }
     }
+    window.localStorage.setItem("nums", JSON.stringify(nums))
 }
 function setBord(){
     CARD.style.pointerEvents = "none"
     CARD.className = "row bg-warning"
-    for(let i = 0; i < nums.length; i++){
+    for(let i = 0; i < stordNums.length; i++){
         CARD.innerHTML += `<div id="${i}" class="col-3 my-2"><img src="images/blank.png" width="100%" onclick="show(${i})"></div>`
     }
 }
 function show(num){
     setStyle(num, "primary")
     setTimeout(() => {
-        window.document.getElementById(num).innerHTML = `<img src="images/${nums[num]}.png" width="100%">`
+        window.document.getElementById(num).innerHTML = `<img src="images/${stordNums[num]}.png" width="100%">`
     }, 50)
     opendCards[opendCards.length] = num
     if(opendCards.length % 2 == 0){
         MOVES.innerText = opendCards.length/2
-        if(nums[opendCards[opendCards.length-2]] != nums[opendCards[opendCards.length-1]]){
+        if(stordNums[opendCards[opendCards.length-2]] != stordNums[opendCards[opendCards.length-1]]){
             CARD.style.pointerEvents = "none"
             setTimeout(() => {
                 close();
@@ -54,7 +67,7 @@ function show(num){
         }
         else{
             pairs++
-            if(pairs == nums.length/2){
+            if(pairs == stordNums.length/2){
                 endGame()
             }
         }
