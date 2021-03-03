@@ -5,30 +5,31 @@ const TIME = window.document.getElementById("time")
 const MOVES = window.document.getElementById("moves")
 const ENDGAME = window.document.getElementById("endGame")
 var nums = []
-var opendCards = []
-var pairs = 0
-var minuts = 0
-var seconds = 0
-var m0 = "0"
-var s0 = "0"
-
+var opendCards = JSON.parse(window.localStorage.getItem("opendCards"))
+var pairs = parseInt(window.localStorage.getItem("pairs"))
+var minuts = parseInt(window.localStorage.getItem("minuts"))
+var seconds = parseInt(window.localStorage.getItem("seconds"))
+var m0 = window.localStorage.getItem("m0")
+var s0 = window.localStorage.getItem("s0")
 var start = null
-var stordNums = JSON.parse(window.localStorage.getItem("nums"))
-var stopendCards = JSON.parse(window.localStorage.getItem("opendCards"))
-var stpairs = parseInt(window.localStorage.getItem("pairs"))
-var stminuts = parseInt(window.localStorage.getItem("minuts"))
-var stseconds = parseInt(window.localStorage.getItem("seconds"))
-var stm0 = window.localStorage.getItem("m0")
-var sts0 = window.localStorage.getItem("s0")
+var stordNums = JSON.parse(window.localStorage.getItem("nums")) 
+
+console.log(opendCards)
 
 if(stordNums.length == 0){
     setNumbers()
 }
 setBord()
-setTimeout(()=>startTimer(),800)
+setTimeout(()=>startTimer(),700)
 
 function startGame(){
     window.localStorage.removeItem("nums")
+    window.localStorage.setItem("opendCards", JSON.stringify([]))
+    window.localStorage.setItem("pairs", 0)
+    window.localStorage.setItem("minuts", 0)
+    window.localStorage.setItem("seconds", 0)
+    window.localStorage.setItem("m0", "0")
+    window.localStorage.setItem("s0", "0")
     setNumbers()
     window.document.location.reload()
 }
@@ -47,7 +48,13 @@ function setBord(){
     CARD.style.pointerEvents = "none"
     CARD.className = "row bg-warning"
     for(let i = 0; i < stordNums.length; i++){
-        CARD.innerHTML += `<div id="${i}" class="col-3 my-2"><img src="images/blank.png" width="100%" onclick="show(${i})"></div>`
+        let opend = opendCards.find(opend => opend == i)
+        if(opend == i){
+            CARD.innerHTML += `<div id="${i}" class="col-3 my-2"><img src="images/${stordNums[i]}.png" width="100%"></div>`
+        }
+        else{
+            CARD.innerHTML += `<div id="${i}" class="col-3 my-2"><img src="images/blank.png" width="100%" onclick="show(${i})"></div>`
+        }
     }
 }
 function show(num){
@@ -56,6 +63,7 @@ function show(num){
         window.document.getElementById(num).innerHTML = `<img src="images/${stordNums[num]}.png" width="100%">`
     }, 50)
     opendCards[opendCards.length] = num
+    window.localStorage.setItem("opendCards", JSON.stringify(opendCards))
     if(opendCards.length % 2 == 0){
         MOVES.innerText = opendCards.length/2
         if(stordNums[opendCards[opendCards.length-2]] != stordNums[opendCards[opendCards.length-1]]){
@@ -67,6 +75,7 @@ function show(num){
         }
         else{
             pairs++
+            window.localStorage.setItem("pairs", pairs)
             if(pairs == stordNums.length/2){
                 endGame()
             }
@@ -78,6 +87,8 @@ function close(){
         setStyle(opendCards[i], "danger")
         setTimeout(() => {
             window.document.getElementById(opendCards[i]).innerHTML = `<img src="images/blank.png" width="100%" onclick="show(${opendCards[i]})">`
+            opendCards[i] = -1
+            window.localStorage.setItem("opendCards", JSON.stringify(opendCards))
         }, 260)
     }
 }
@@ -118,21 +129,29 @@ function startTimer(){
     CARD.style.pointerEvents = "auto"
     start = setInterval(() => {
         seconds++
+        window.localStorage.setItem("seconds", seconds)
         TIME.innerHTML = `&#8987; <span onclick="gamePause()">${m0}${minuts}:${s0}${seconds} &#9656;</span>`
         if(seconds == 9){
             s0 = ""
+            window.localStorage.setItem("s0", s0)
         }
         if(m0 == 10){
             m0 = ""
+            window.localStorage.setItem("m0", m0)
         }
         if(seconds == 60){
             seconds = 0
+            window.localStorage.setItem("seconds", seconds)
             minuts++
+            window.localStorage.setItem("minuts", minuts)
             s0 = "0"
+            window.localStorage.setItem("s0", s0)
         }
         if(minuts == 60){
             minuts = 0
+            window.localStorage.setItem("minuts", minuts)
             m0 = "0"
+            window.localStorage.setItem("m0", m0)
         }
     }, 1000)
 }
