@@ -14,15 +14,14 @@ var s0 = window.localStorage.getItem("s0")
 var start = null
 var stordNums = JSON.parse(window.localStorage.getItem("nums")) 
 
-console.log(opendCards)
-
 if(stordNums.length == 0){
     setNumbers()
 }
 setBord()
-TIME.innerHTML = `&#8987; <span onclick="startTimer()">${m0}${minuts}:${s0}${seconds} &#9726;</span>`
-MOVES.innerText = opendCards.length/2
-setTimeout(()=>startTimer(),700)
+MOVES.innerText = Math.floor(opendCards.length/2)
+if(pairs != stordNums.length/2){
+    startTimer()
+}
 
 function startGame(){
     window.localStorage.removeItem("nums")
@@ -128,6 +127,7 @@ function setStyle(id, color, text=""){
     window.document.getElementById(id).innerHTML = `<div class="bg-${color} w-100 h-100 text-center">${text}</div>`
 }
 function startTimer(){
+    TIME.innerHTML = `&#8987; <span onclick="gamePause()">${m0}${minuts}:${s0}${seconds} &#9656;</span>`
     CARD.style.pointerEvents = "auto"
     start = setInterval(() => {
         seconds++
