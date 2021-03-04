@@ -20,6 +20,8 @@ if(stordNums.length == 0){
     setNumbers()
 }
 setBord()
+TIME.innerHTML = `&#8987; <span onclick="startTimer()">${m0}${minuts}:${s0}${seconds} &#9726;</span>`
+MOVES.innerText = opendCards.length/2
 setTimeout(()=>startTimer(),700)
 
 function startGame(){
